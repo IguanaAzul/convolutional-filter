@@ -2,7 +2,8 @@ import numpy as np
 import cv2
 from skimage.exposure import rescale_intensity
 import warnings
-np.random.seed(4)
+np.random.seed(8)
+
 
 def convolve(image_array, kernel, padding=0, stride=1):
     image_height, image_width = image_array.shape
@@ -33,7 +34,7 @@ def convolve(image_array, kernel, padding=0, stride=1):
                     warned_shape = True
                 continue
             output[x_output, y_output] = (slice_of_image * kernel).sum()
-    output = np.absolute(output)
+
     output = rescale_intensity(output, in_range=(0, 255))
     output = np.transpose((output * 255).astype("uint8"))
 
@@ -48,7 +49,11 @@ vertical_sobel_filter = np.array(
     ), dtype="int"
 )
 
+negative_vertical_sobel = -vertical_sobel_filter
+
 horizontal_sobel_filter = np.transpose(vertical_sobel_filter)
+
+negative_horizontal_sobel = -horizontal_sobel_filter
 
 teste_edger = np.array(
     (
@@ -82,6 +87,8 @@ cv2.imshow("vertical_sobel_filter", convolve(gray, vertical_sobel_filter))
 cv2.imshow("horizontal_sobel_filter", convolve(gray, horizontal_sobel_filter))
 cv2.imshow("teste_edger", convolve(gray, teste_edger))
 cv2.imshow("conv_filter_1", convolve(gray, conv_filter_1))
+cv2.imshow("negative_vertical_sobel", convolve(gray, negative_vertical_sobel))
+cv2.imshow("negative_horizontal_sobel", convolve(gray, negative_horizontal_sobel))
 cv2.imshow("teste_edger padding 100 stride 5", convolve(gray, teste_edger, padding=100, stride=5))
 cv2.imshow("teste_edger padding 1 stride 2", convolve(gray, teste_edger, padding=1, stride=2))
 cv2.imshow("teste_edger padding 100 stride 5", convolve(gray, teste_edger, padding=100, stride=5))
