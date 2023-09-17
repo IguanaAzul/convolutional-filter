@@ -4,8 +4,8 @@ from skimage.exposure import rescale_intensity
 
 
 def convolve(image_array, kernel, padding=0, stride=1):
-    (image_height, image_width) = image_array.shape
-    (kernel_height, kernel_width) = kernel.shape
+    image_height, image_width = image_array.shape
+    kernel_height, kernel_width = kernel.shape
     convolution_input = (
         cv2.copyMakeBorder(image_array, padding, padding, padding, padding, cv2.BORDER_REPLICATE)
         if padding
@@ -60,9 +60,10 @@ image = cv2.imread("images/ramon.jpg")
 
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-convolveOutput = convolve(gray, teste_edger, padding=100, stride=5)
 cv2.imshow("original", gray)
-convolveOutput[convolveOutput < 255] = 0
-cv2.imshow("CONVOLUCIONADO", convolveOutput)
+cv2.imshow("vertical_sobel_filter", convolve(gray, vertical_sobel_filter))
+cv2.imshow("horizontal_sobel_filter", convolve(gray, horizontal_sobel_filter))
+cv2.imshow("teste_edger", convolve(gray, teste_edger))
+cv2.imshow("conv_filter_1", convolve(gray, conv_filter_1))
 cv2.waitKey(0)
 cv2.destroyAllWindows()
